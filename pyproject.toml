@@ -1,7 +1,7 @@
 [project]
 name = "geow"
 version = "0.1.0"
-description = "Add your description here"
+description = "Add Description"
 readme = "README.md"
 authors = [{ name = "lorerlrolerl", email = "lrl.aide307@simplelogin.fr" }]
 requires-python = ">=3.12"
