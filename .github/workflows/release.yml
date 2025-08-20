@@ -21,7 +21,7 @@ jobs:
       - name: Run Semantic Release (determine version & changelog)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release version --no-push --config .github/semantic-release.yaml
+        run: uv run semantic-release version --no-push
       - name: Publish to TestPyPI
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
