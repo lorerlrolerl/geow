@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.0.0 (2025-08-20)
+
+### Bug Fixes
+
+- Trigger patch release
+  ([`7b98f19`](https://github.com/lorerlrolerl/geow/commit/7b98f1981ed793e67e3004736ec0384c74dcd762))
+
+
 ## v1.0.5 (2025-08-20)
 
 ### Bug Fixes
