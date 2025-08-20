@@ -1,24 +1,17 @@
-name: Release
-
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch: # allow manual runs
+  workflow_call:
 
 permissions:
-  contents: write # required for creating GitHub Releases
-  id-token: write # required for PyPI trusted publishing (later)
+  contents: write
 
 jobs:
-  release:
+  semantic-release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # full history needed for semantic-release
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -28,7 +21,7 @@ jobs:
       - name: Setup uv
         uses: astral-sh/setup-uv@v4
 
-      - name: Install dependencies
+      - name: Install dev dependencies
         run: uv sync --group dev
 
       - name: Configure git
