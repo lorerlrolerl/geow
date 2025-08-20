@@ -25,4 +25,13 @@ dev = [
     "pyright>=1.1.403",
     "pytest>=8.4.1",
     "ruff>=0.12.9",
+    "python-semantic-release>=9.8.7",
 ]
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+changelog_file = "CHANGELOG.md"
+commit_parser = "angular"
+upload_to_release = true
+upload_to_pypi = false
