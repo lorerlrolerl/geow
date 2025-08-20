@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Run pre-commit checks
+        run: uv run pre-commit run --all-files --show-diff-on-failure
+
+      - name: Run tests (if present)
+        run: |
+          set -euo pipefail
+          if git ls-files -- 'tests/**/*.py' | grep -q .; then
+            uv run pytest -q tests
+          else
+            echo "No tests found under tests/. Skipping."
+          fi
