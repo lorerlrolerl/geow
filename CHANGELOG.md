@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.0.5 (2025-08-20)
+
+### Bug Fixes
+
+- Update pyproject.toml
+  ([`7eddabb`](https://github.com/lorerlrolerl/geow/commit/7eddabb1aeba808eb9382f8d0cf371038f38c57d))
+
+
 ## v1.0.4 (2025-08-20)
 
 ### Bug Fixes
