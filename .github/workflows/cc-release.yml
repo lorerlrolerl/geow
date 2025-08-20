@@ -29,18 +29,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Semantic release
+      - name: Run Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release version
-
-      - name: Push version bump
-        if: ${{ success() }}
+          TEST_PYPI_USERNAME: __token__
+          TEST_PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
         run: |
-          git push --follow-tags origin HEAD:main
-
-      - name: Create GitHub Release
-        if: ${{ success() }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release publish
+          uv run semantic-release version
+          uv run semantic-release publish -r testpypi

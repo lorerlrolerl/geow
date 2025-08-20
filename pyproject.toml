@@ -1,6 +1,6 @@
 [project]
 name = "geow"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Add Description"
 readme = "README.md"
 authors = [{ name = "lorerlrolerl", email = "lrl.aide307@simplelogin.fr" }]
@@ -28,9 +28,9 @@ dev = [
 
 [tool.semantic_release]
 branch = "main"
-version_toml = ["pyproject.toml:project.version"]
 changelog_file = "CHANGELOG.md"
 commit_parser = "angular"
+version_source = "tag"
 upload_to_release = true
 upload_to_pypi = false
 tag_format = "v{version}"
