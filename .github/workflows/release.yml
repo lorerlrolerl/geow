@@ -16,14 +16,23 @@ jobs:
         with:
           fetch-depth: 0  # needed so semantic-release can analyze commit history
       - uses: astral-sh/setup-uv@v3
-      - run: uv sync --dev
+      - run: uv sync --all-groups
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Run Semantic Release (bump version & create tag)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run semantic-release version
 
-      - name: Run Semantic Release (determine version & changelog)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release version --no-push
+      - name: Build package
+        run: uv build
+
       - name: Publish to TestPyPI
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PYPI_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: uv run semantic-release publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true

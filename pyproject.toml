@@ -1,7 +1,7 @@
 [project]
 name = "geow"
 # Remove this line: version = "0.1.0"
-version = "0.0.0"
+dynamic = ["version"]
 description = "Add Description"
 readme = "README.md"
 authors = [{ name = "lorerlrolerl", email = "lrl.aide307@simplelogin.fr" }]
@@ -36,6 +36,7 @@ pypi_repository = "testpypi"
 commit_parser = "conventional"
 changelog_file = "CHANGELOG.md"
 tag_format = "v{version}"
+version_toml = ["pyproject.toml:project.version"] # Add this
 
 [tool.semantic_release.remote]
 type = "github"
