@@ -1,39 +1,42 @@
+name: Release
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch: # allow manual runs
 
 permissions:
-  contents: write
+  contents: write # required for creating GitHub Releases
+  id-token: write # required for PyPI trusted publishing (later)
 
 jobs:
-  semantic-release:
+  release:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history needed for semantic-release
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - uses: astral-sh/setup-uv@v4
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
 
-      - name: Install deps (dev)
+      - name: Install dependencies
         run: uv sync --group dev
 
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run Semantic Release
+      - name: Run semantic-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_PYPI_USERNAME: __token__
-          TEST_PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: |
-          uv run semantic-release version
-          uv run semantic-release publish -r testpypi
+        run: uv run semantic-release publish -r testpypi
