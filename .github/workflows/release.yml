@@ -1,34 +1,29 @@
+name: Release
+
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
-  semantic:
-    uses: ./.github/workflows/semantic-release.yml
-
   release:
-    needs: semantic
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # needed so semantic-release can analyze commit history
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --dev
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - uses: astral-sh/setup-uv@v4
-
-      - name: Build sdist and wheel
-        run: uv build
-
+      - name: Run Semantic Release (determine version & changelog)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run semantic-release version --no-push --config .github/semantic-release.yaml
       - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        run: uv run semantic-release publish

@@ -1,35 +1,13 @@
-on:
-  workflow_call:
+version_source: tag
+commit_parser: conventional
+changelog_file: CHANGELOG.md
+tag_format: v{version}
 
-permissions:
-  contents: write
+upload_to_release: true
+upload_to_pypi: true
 
-jobs:
-  semantic-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+pypi_repository: testpypi  # 👈 key line, sends to TestPyPI
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Install dev dependencies
-        run: uv sync --group dev
-
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Run semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run semantic-release publish
+remote:
+  type: github
+  token: $GITHUB_TOKEN
