@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+      - /app/.venv
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app/src
+    command: ["uv", "run", "--watch", "pytest"]
+    profiles:
+      - development
+
+  test:
+    build:
+      context: .
+      target: test
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app/src
+    profiles:
+      - testing
+
+  docs:
+    build:
+      context: .
+      target: docs
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: ["uv", "run", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
+    profiles:
+      - documentation
+
+  prod:
+    build:
+      context: .
+      target: prod
+    profiles:
+      - production
+
+  # GitHub Container Registry service
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    volumes:
+      - registry_data:/var/lib/registry
+    profiles:
+      - registry
+
+volumes:
+  registry_data:

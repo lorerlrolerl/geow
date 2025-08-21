@@ -1,44 +1,38 @@
-[project]
-name = "geow"
-# Remove this line: version = "0.1.0"
-dynamic = ["version"]
-description = "Add Description"
-readme = "README.md"
-authors = [{ name = "lorerlrolerl", email = "lrl.aide307@simplelogin.fr" }]
-requires-python = ">=3.10"
-dependencies = []
-
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=68.0", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "geow"
+dynamic = ["version"]
+description = "A Python package"
+readme = "README.md"
+authors = [{ name = "lorerlrolerl", email = "lrl.aide307@simplelogin.fr" }]
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = []
 
 [dependency-groups]
 dev = [
-    "hypothesis>=6.138.2",
-    "mkdocs-material>=9.6.17",
-    "mkdocstrings>=0.30.0",
-    "pre-commit>=4.3.0",
-    "pyright>=1.1.403",
     "pytest>=8.4.1",
     "ruff>=0.12.9",
-    "python-semantic-release>=9.8.7",
+    "pre-commit>=4.3.0",
+    "python-semantic-release>=10.3.1",
 ]
 
-[tool.uv] # uv-specific config if needed
-dev-dependencies = ["python-semantic-release"]
+[tool.setuptools.dynamic]
+version = { attr = "geow.__version__" }
 
 [tool.semantic_release]
-version_source = "tag"
+version_variable = "src/geow/__init__.py:__version__"
+version_toml = "pyproject.toml:project.version"
+build_command = "uv run python -m build"
 upload_to_pypi = false
 upload_to_release = true
-pypi_repository = "testpypi"
-commit_parser = "conventional"
-changelog_file = "CHANGELOG.md"
-tag_format = "v{version}"
-version_toml = ["pyproject.toml:project.version"]
-major_on_zero = false
 
-[tool.semantic_release.remote]
-type = "github"
-token = { env = "GITHUB_TOKEN" }
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
