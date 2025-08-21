@@ -21,10 +21,10 @@ RUN pip install uv
 WORKDIR /app
 
 # Copy dependency files
-COPY pyproject.toml uv.lock* ./
+COPY pyproject.toml ./
 
 # Install dependencies with uv
-RUN uv sync --frozen
+RUN uv sync
 
 # Copy source code
 COPY . .
