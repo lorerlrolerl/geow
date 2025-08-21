@@ -2,3 +2,5 @@
 .vscode/
 .ruff_cache/
 .env
+uv.lock
+src/geow.egg-info
