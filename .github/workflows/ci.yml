@@ -33,13 +33,9 @@ jobs:
       run: uv run pre-commit run --all-files
 
     - name: Run tests
-      run: uv run pytest --cov=src/geow --cov-report=xml
+      run: uv run pytest
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: false
+
 
   lint:
     runs-on: ubuntu-latest
